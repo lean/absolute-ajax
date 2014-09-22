@@ -1,57 +1,33 @@
-//absolute-ajax
-//----------------
-//version 0.1
-//author: Leandro Cabrera (leaocabrera@gmail.com)
-//https://github.com/lean/
-//Licensed under the MIT license.
-
-
+/*!absolute-ajax
+---------------
+version 0.2.0
+author: Leandro Cabrera (leaocabrera@gmail.com)
+https://github.com/lean/
+Licensed under the MIT license.
+*/
 (function () {
-
+  "use strict";
     var abjax = {},
-        breaker = {},
         noop = function () {},
-        each = function(obj, iterator, context) {
-          if (obj == null) return obj;
-          if (Array.prototype.forEach && obj.forEach === Array.prototype.forEach) {
-            obj.forEach(iterator, context);
-          } else if (obj.length === +obj.length) {
-            for (var i = 0, length = obj.length; i < length; i++) {
-              if (iterator.call(context, obj[i], i, obj) === breaker) return;
-            }
-          } else {
-            var keys = keys(obj);
-            for (var i = 0, length = keys.length; i < length; i++) {
-              if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
-            }
-          }
-          return obj;
-        },
-        has = function(obj, key) {
-          return hasOwnProperty.call(obj, key);
-        },
         isFunction = function(obj) {
-          return typeof obj === 'function';
+          return typeof obj === "function";
         },
         isObject = function(obj) {
-          return obj === Object(obj);
+          var type = typeof obj;
+          return type === "function" || type === "object" && !!obj;
         },
         extend = function(obj) {
-          each(slice.call(arguments, 1), function(source) {
-            if (source) {
-              for (var prop in source) {
-                obj[prop] = source[prop];
+          if (!isObject(obj)) {
+            return obj;
+          }
+              var source, prop;
+              for (var i = 1, length = arguments.length; i < length; i++) {
+                source = arguments[i];
+                for (prop in source) {
+                  obj[prop] = source[prop];
+                }
               }
-            }
-          });
-          return obj;
-        },
-        keys = function(obj) {
-          if (!isObject(obj)) return [];
-          if (Object.prototype.keys) return Object.prototype.keys(obj);
-          var keys = [];
-          for (var key in obj) if (has(obj, key)) keys.push(key);
-          return keys;
+              return obj;
         };
 
     abjax.param = function (obj, prefix) {
@@ -151,7 +127,7 @@
 
             var abortTimeout;
             var context = settings.context;
-            var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.abjax1 : window.location.protocol;
+            var protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
 
             xhr = new window.XMLHttpRequest();
 
@@ -173,7 +149,7 @@
                         } else {
                             result = xhr.responseText;
                         }
-                        //If we're looking at a local file, we assume that no response sent back means there was an error
+                        //If we"re looking at a local file, we assume that no response sent back means there was an error
                         if (xhr.status === 0 && result.length === 0) {
                             error = true;
                         }
@@ -182,7 +158,7 @@
                         } else {
                             settings.success.call(context, result, "success", xhr);
                         }
-                        
+
                     } else {
                         error = true;
                         settings.error.call(context, xhr, "error");
