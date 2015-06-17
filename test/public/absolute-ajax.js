@@ -16,7 +16,7 @@ Licensed under the MIT license.
     var isFunction = function (obj) {
         return toString.call(obj) === "[object Function]";
     };
-    
+
     // Underscore.js: Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
     // IE 11 (#1621), and in Safari 8 (#1929).
     /* jshint ignore:start */
@@ -59,10 +59,9 @@ Licensed under the MIT license.
 
     var ajaxSettings = {
         type: "GET",
-        beforeSend: empty,
         success: empty,
         error: empty,
-        complete: empty,
+        complete: empty, //XHR only
         context: undefined,
         timeout: 0,
         crossDomain: null,
@@ -106,7 +105,7 @@ Licensed under the MIT license.
                 }
             }
         };
-        
+
         xdr.timeout = settings.timeout;
         xdr.open(settings.type, settings.url);
 
@@ -134,11 +133,11 @@ Licensed under the MIT license.
     }
 
     function useXHR(opts, settings) {
-        var xhr,
+        var xhr = new window.XMLHttpRequest(),
             abortTimeout,
             context = settings.context,
             protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-        
+
         if (typeof (opts) === "string") {
             var oldUrl = opts;
             opts = {
@@ -207,9 +206,6 @@ Licensed under the MIT license.
             }, settings.headers);
         }
 
-        //ok, we are really using xhr
-        xhr = new window.XMLHttpRequest();
-
         xhr.onreadystatechange = function () {
             var mime = settings.dataType;
             if (xhr.readyState === 4) {
@@ -227,7 +223,7 @@ Licensed under the MIT license.
                         try {
                             result = xhr.responseText;
                         } catch (e) {
-                            console.log(e);
+                            console.error(e);
                         }
                     } else if (mime === "application/xml, text/xml") {
                         result = xhr.responseXML;
@@ -267,10 +263,6 @@ Licensed under the MIT license.
                 xhr.setRequestHeader(name, settings.headers[name]);
             }
         }
-        if (settings.beforeSend.call(context, xhr, settings) === false) {
-            xhr.abort();
-            return false;
-        }
 
         if (settings.timeout > 0) {
             abortTimeout = setTimeout(function () {
@@ -286,7 +278,15 @@ Licensed under the MIT license.
     }
 
     window.abjax = {
-        ajax: ajax
+        ajax: ajax,
+        get: function(options){
+            options.type = "GET";
+            ajax(options);
+        },
+        post: function(options){
+            options.type = "POST";
+            ajax(options);
+        }
     };
-    
+
 })();

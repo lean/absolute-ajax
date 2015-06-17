@@ -4,6 +4,14 @@ describe('methods', function () {
     it('should expose a function', function () {
         expect(abjax.ajax).to.be.ok();
     });
+
+    it('should expose a GET method', function () {
+        expect(abjax.get).to.be.ok();
+    });
+
+    it('should expose a POST method', function () {
+        expect(abjax.post).to.be.ok();
+    });
 });
 
 describe('requests', function () {
@@ -11,6 +19,16 @@ describe('requests', function () {
 
     it('should do a GET', function (done) {
         abjax.ajax({
+            url: "/json",
+            success: function (response) {
+                expect(response).to.be.ok();
+                done();
+            }
+        });
+    });
+
+    it('should do a GET with method', function (done) {
+        abjax.get({
             url: "/json",
             success: function (response) {
                 expect(response).to.be.ok();
@@ -38,6 +56,16 @@ describe('requests', function () {
     it('should do a POST', function (done) {
         abjax.ajax({
             type: "POST",
+            url: "/post",
+            success: function (response) {
+                expect(response).to.be.ok();
+                done();
+            }
+        });
+    });
+
+    it('should do a POST with method', function (done) {
+        abjax.post({
             url: "/post",
             success: function (response) {
                 expect(response).to.be.ok();

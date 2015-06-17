@@ -11,6 +11,9 @@
     "quotmark": "double",
     "strict": true,
     "validthis": true,
+    "freeze": true,
+    "asi": true,
+    "boss": true,
     "globals": {
         "XDomainRequest": true,
         "console": true,
