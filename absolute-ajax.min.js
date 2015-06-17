@@ -1,6 +1,6 @@
 /*!absolute-ajax
 ---------------
-version 0.3.0
+version 0.3.1
 author: Leandro Cabrera (leaocabrera@gmail.com)
 https://github.com/lean/
 Licensed under the MIT license.
