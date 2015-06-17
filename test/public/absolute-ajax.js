@@ -16,7 +16,7 @@ Licensed under the MIT license.
     var isFunction = function (obj) {
         return toString.call(obj) === "[object Function]";
     };
-
+    
     // Underscore.js: Optimize `isFunction` if appropriate. Work around some typeof bugs in old v8,
     // IE 11 (#1621), and in Safari 8 (#1929).
     /* jshint ignore:start */
@@ -106,7 +106,7 @@ Licensed under the MIT license.
                 }
             }
         };
-
+        
         xdr.timeout = settings.timeout;
         xdr.open(settings.type, settings.url);
 
@@ -138,7 +138,7 @@ Licensed under the MIT license.
             abortTimeout,
             context = settings.context,
             protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol;
-
+        
         if (typeof (opts) === "string") {
             var oldUrl = opts;
             opts = {
@@ -288,5 +288,5 @@ Licensed under the MIT license.
     window.abjax = {
         ajax: ajax
     };
-
+    
 })();

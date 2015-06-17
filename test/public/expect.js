@@ -637,7 +637,7 @@
       if (isDate(value) && $keys.length === 0) {
         return stylize(value.toUTCString(), 'date');
       }
-      
+
       // Error objects can be shortcutted
       if (value instanceof Error) {
         return stylize("["+value.toString()+"]", 'Error');
@@ -1920,7 +1920,7 @@
       if (isDate(value) && $keys.length === 0) {
         return stylize(value.toUTCString(), 'date');
       }
-      
+
       // Error objects can be shortcutted
       if (value instanceof Error) {
         return stylize("["+value.toString()+"]", 'Error');
