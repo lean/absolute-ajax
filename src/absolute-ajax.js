@@ -1,3 +1,4 @@
+
 /*!absolute-ajax
 ---------------
 version 0.3.1
@@ -91,7 +92,6 @@ Licensed under the MIT license.
         var context = settings.context;
 
         var callback = function (status, statusText, responses) {
-
             xdr.onload = xdr.onerror = xdr.ontimeout = function () {};
             xdr = undefined;
 
@@ -105,31 +105,44 @@ Licensed under the MIT license.
                 }
             }
         };
+        
+        if (xdr) {
+            xdr.onprogress = function () {
+                //Progress
+            };
 
-        xdr.timeout = settings.timeout;
-        xdr.open(settings.type, settings.url);
+            xdr.ontimeout = function () {
+                callback(0, "timeout");
+            };
 
-        xdr.onprogress = function () {
-            //Progress
-        };
+            xdr.onerror = function () {
+                callback(404, "Not Found");
+            };
 
-        xdr.ontimeout = function () {
-            callback(0, "timeout");
-        };
-
-        xdr.onerror = function () {
-            callback(404, "Not Found");
-        };
-
-        xdr.onload = function () {
-            callback(200, "OK", {
-                text: xdr.responseText
-            }, "Content-Type: " + xdr.contentType);
-        };
-
-        setTimeout(function () {
-            xdr.send(settings.data || null);
-        }, 0);
+            xdr.onload = function () {
+                callback(200, "OK", {
+                    text: xdr.responseText
+                }, "Content-Type: " + xdr.contentType);
+            };
+            
+            if (settings.processData && isObject(settings.data)) {
+                settings.data = param(settings.data);
+            }
+            xdr.timeout = settings.timeout;
+            xdr.open(settings.type, settings.url + '?' + settings.data);
+            setTimeout(function () {
+                
+                try {
+                    xdr.send();    
+                } catch (e) {
+                    alert(e);
+                }
+                
+            }, 0);
+        } else {
+            alert("Failed to xdr");
+        }
+        
     }
 
     function useXHR(opts, settings) {
